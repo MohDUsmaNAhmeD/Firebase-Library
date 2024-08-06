@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Library Documentation</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="Search features">
+    <div class="container">
+        
+        <div id="Top"></div>
+    <h1>Firebase Library Documentation</h1>
+
+    <h2>1. Initialize Firebase</h2>
+    <p>This function initializes Firebase in your application.</p>
+    <pre><code>
+// Example usage
+firebase.initializeApp({
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID"
+});
+    </code></pre>
+
+    <h2>2. Create User</h2>
+    <p>Creates a new user account with email and password.</p>
+    <pre><code>
+// Example usage
+firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        // User created successfully
+        const user = userCredential.user;
+        console.log("User created:", user.uid);
+    })
+    .catch((error) => {
+        console.error("Error creating user:", error);
+    });
+    </code></pre>
+
+    <h2>3. Sign In User</h2>
+    <p>Signs in an existing user with email and password.</p>
+    <pre><code>
+// Example usage
+firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        // User signed in successfully
+        const user = userCredential.user;
+        console.log("User signed in:", user.uid);
+    })
+    .catch((error) => {
+        console.error("Error signing in:", error);
+    });
+    </code></pre>
+
+    <h2>4. Write Data</h2>
+    <p>Writes data to the Firebase Realtime Database.</p>
+    <pre><code>
+// Example usage
+firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+})
+.then(() => {
+    console.log("Data written successfully");
+})
+.catch((error) => {
+    console.error("Error writing data:", error);
+});
+    </code></pre>
+
+    <h2>5. Read Data</h2>
+    <p>Reads data from the Firebase Realtime Database.</p>
+    <pre><code>
+// Example usage
+firebase.database().ref('users/' + userId).once('value')
+    .then((snapshot) => {
+        const userData = snapshot.val();
+        console.log("User data:", userData);
+    })
+    .catch((error) => {
+        console.error("Error reading data:", error);
+    });
+    </code></pre>
+    <h2>6. Sign Out User</h2>
+    <p>Signs out the currently authenticated user.</p>
+    <pre><code>
+// Example usage
+firebase.auth().signOut()
+    .then(() => {
+        console.log("User signed out successfully");
+    })
+    .catch((error) => {
+        console.error("Error signing out:", error);
+    });
+    </code></pre>
+
+    <h2>7. Delete User</h2>
+    <p>Deletes the currently authenticated user's account.</p>
+    <pre><code>
+// Example usage
+firebase.auth().currentUser.delete()
+    .then(() => {
+        console.log("User deleted successfully");
+    })
+    .catch((error) => {
+        console.error("Error deleting user:", error);
+    });
+    </code></pre>
+
+    <h2>8. Update User Profile</h2>
+    <p>Updates the profile of the currently authenticated user.</p>
+    <pre><code>
+// Example usage
+firebase.auth().currentUser.updateProfile({
+    displayName: "John Doe",
+    photoURL: "https://example.com/profile.jpg"
+})
+.then(() => {
+    console.log("Profile updated successfully");
+})
+.catch((error) => {
+    console.error("Error updating profile:", error);
+});
+    </code></pre>
+
+    <h2>9. Listen for Auth State Changes</h2>
+    <p>Sets up a listener for authentication state changes.</p>
+    <pre><code>
+// Example usage
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log("User is signed in:", user.uid);
+    } else {
+        console.log("No user is signed in");
+    }
+});
+    </code></pre>
+
+    <h2>10. Upload File to Storage</h2>
+    <p>Uploads a file to Firebase Storage.</p>
+    <pre><code>
+// Example usage
+const file = // ... get file from input
+const storageRef = firebase.storage().ref('images/' + file.name);
+storageRef.put(file)
+    .then((snapshot) => {
+        console.log("File uploaded successfully");
+    })
+    .catch((error) => {
+        console.error("Error uploading file:", error);
+    });
+    </code></pre>
+
+    <h2>11. Download File from Storage</h2>
+    <p>Downloads a file from Firebase Storage.</p>
+    <pre><code>
+// Example usage
+const storageRef = firebase.storage().ref('images/example.jpg');
+storageRef.getDownloadURL()
+    .then((url) => {
+        console.log("File download URL:", url);
+    })
+    .catch((error) => {
+        console.error("Error getting download URL:", error);
+    });
+    </code></pre>
+
+    <h2>12. Delete File from Storage</h2>
+    <p>Deletes a file from Firebase Storage.</p>
+    <pre><code>
+// Example usage
+const storageRef = firebase.storage().ref('images/example.jpg');
+storageRef.delete()
+    .then(() => {
+        console.log("File deleted successfully");
+    })
+    .catch((error) => {
+        console.error("Error deleting file:", error);
+    });
+    </code></pre>
+
+    <h2>13. Real-time Database Listener</h2>
+    <p>Sets up a listener for real-time updates on a database reference.</p>
+    <pre><code>
+// Example usage
+const dbRef = firebase.database().ref('users/' + userId);
+dbRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    console.log("Updated data:", data);
+}, (error) => {
+    console.error("Error listening to data:", error);
+});
+    </code></pre>
+
+    <h2>14. Firestore Add Document</h2>
+    <p>Adds a new document to a Firestore collection.</p>
+    <pre><code>
+// Example usage
+firebase.firestore().collection("users").add({
+    name: "John Doe",
+    age: 30,
+    city: "New York"
+})
+.then((docRef) => {
+    console.log("Document written with ID:", docRef.id);
+})
+.catch((error) => {
+    console.error("Error adding document:", error);
+});
+    </code></pre>
+
+    <h2>15. Firestore Get Document</h2>
+    <p>Retrieves a specific document from a Firestore collection.</p>
+    <pre><code>
+// Example usage
+firebase.firestore().collection("users").doc(userId).get()
+    .then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
+    </code></pre>
+
+    <h2>16. Firestore Update Document</h2>
+    <p>Updates a specific document in a Firestore collection.</p>
+    <pre><code>
+// Example usage
+firebase.firestore().collection("users").doc(userId).update({
+    age: 31,
+    city: "Los Angeles"
+})
+.then(() => {
+    console.log("Document successfully updated");
+})
+.catch((error) => {
+    console.error("Error updating document:", error);
+});
+    </code></pre>
+
+    <h2>17. Firestore Delete Document</h2>
+    <p>Deletes a specific document from a Firestore collection.</p>
+    <pre><code>
+// Example usage
+firebase.firestore().collection("users").doc(userId).delete()
+    .then(() => {
+        console.log("Document successfully deleted");
+    })
+    .catch((error) => {
+        console.error("Error removing document:", error);
+    });
+    </code></pre>
+
+    <h2>18. Firebase Cloud Messaging (FCM) Send Message</h2>
+    <p>Sends a push notification using Firebase Cloud Messaging.</p>
+    <pre><code>
+// Example usage (requires Firebase Admin SDK on server-side)
+const message = {
+    notification: {
+        title: 'New Message',
+        body: 'You have a new message!'
+    },
+    token: userDeviceToken
+};
+
+admin.messaging().send(message)
+    .then((response) => {
+        console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+        console.error('Error sending message:', error);
+    });
+    </code></pre>
+
+    <h2>19. Firebase Analytics Log Event</h2>
+    <p>Logs an event to Firebase Analytics.</p>
+    <pre><code>
+// Example usage
+firebase.analytics().logEvent('button_click', {
+    button_name: 'submit',
+    screen: 'login'
+});
+    </code></pre>
+
+    <h2>20. Firebase Performance Monitoring</h2>
+    <p>Tracks a custom trace for performance monitoring.</p>
+    <pre><code>
+// Example usage
+const trace = firebase.performance().trace('custom_trace');
+trace.start();
+
+// ... perform some operations
+
+trace.stop();
+    </code></pre>
+    <h2>21. Firebase Authentication with Google</h2>
+    <p>Signs in a user using their Google account.</p>
+    <pre><code>
+const provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+        const user = result.user;
+        console.log("Google Sign-In successful:", user);
+    }).catch((error) => {
+        console.error("Google Sign-In error:", error);
+    });
+    </code></pre>
+
+    <h2>22. Firebase Authentication with Facebook</h2>
+    <p>Signs in a user using their Facebook account.</p>
+    <pre><code>
+const provider = new firebase.auth.FacebookAuthProvider();
+firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+        const user = result.user;
+        console.log("Facebook Sign-In successful:", user);
+    }).catch((error) => {
+        console.error("Facebook Sign-In error:", error);
+    });
+    </code></pre>
+
+    <h2>23. Firebase Authentication with Twitter</h2>
+    <p>Signs in a user using their Twitter account.</p>
+    <pre><code>
+const provider = new firebase.auth.TwitterAuthProvider();
+firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+        const user = result.user;
+        console.log("Twitter Sign-In successful:", user);
+    }).catch((error) => {
+        console.error("Twitter Sign-In error:", error);
+    });
+    </code></pre>
+
+    <h2>24. Firebase Phone Authentication</h2>
+    <p>Initiates phone number verification for authentication.</p>
+    <pre><code>
+const phoneNumber = "+1234567890";
+const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+    .then((confirmationResult) => {
+        // SMS sent. Prompt user to type the code from the message.
+        const code = window.prompt("Enter the verification code");
+        return confirmationResult.confirm(code);
+    }).then((result) => {
+        const user = result.user;
+        console.log("Phone authentication successful:", user);
+    }).catch((error) => {
+        console.error("Phone authentication error:", error);
+    });
+    </code></pre>
+
+    <h2>25. Firestore Query with Where Clause</h2>
+    <p>Queries Firestore documents with a where clause.</p>
+    <pre><code>
+firebase.firestore().collection("users")
+    .where("age", ">=", 18)
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch((error) => {
+        console.error("Error getting documents: ", error);
+    });
+    </code></pre>
+
+    <h2>26. Firestore Query with Order and Limit</h2>
+    <p>Queries Firestore documents with ordering and limiting results.</p>
+    <pre><code>
+firebase.firestore().collection("users")
+    .orderBy("age", "desc")
+    .limit(5)
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch((error) => {
+        console.error("Error getting documents: ", error);
+    });
+    </code></pre>
+
+    <h2>27. Firestore Batch Write</h2>
+    <p>Performs multiple write operations as a single batch.</p>
+    <pre><code>
+const batch = firebase.firestore().batch();
+const usersRef = firebase.firestore().collection("users");
+
+// Add one user
+const newUserRef = usersRef.doc();
+batch.set(newUserRef, { name: "New User", age: 25 });
+
+// Update one user
+const userToUpdateRef = usersRef.doc("user123");
+batch.update(userToUpdateRef, { age: 26 });
+
+// Delete one user
+const userToDeleteRef = usersRef.doc("user456");
+batch.delete(userToDeleteRef);
+
+// Commit the batch
+batch.commit().then(() => {
+    console.log("Batch write successful");
+}).catch((error) => {
+    console.error("Error writing batch ", error);
+});
+    </code></pre>
+
+    <h2>28. Firestore Transaction</h2>
+    <p>Performs a transaction to ensure data consistency.</p>
+    <pre><code>
+const sfDocRef = firebase.firestore().collection("cities").doc("SF");
+
+firebase.firestore().runTransaction((transaction) => {
+    return transaction.get(sfDocRef).then((sfDoc) => {
+        if (!sfDoc.exists) {
+            throw "Document does not exist!";
+        }
+        const newPopulation = sfDoc.data().population + 1;
+        transaction.update(sfDocRef, { population: newPopulation });
+    });
+}).then(() => {
+    console.log("Transaction successfully committed!");
+}).catch((error) => {
+    console.error("Transaction failed: ", error);
+});
+    </code></pre>
+
+    <h2>29. Cloud Functions HTTP Trigger</h2>
+    <p>Deploys an HTTP-triggered Cloud Function.</p>
+    <pre><code>
+// In your Cloud Functions index.js
+exports.helloWorld = functions.https.onRequest((request, response) => {
+    response.send("Hello from Firebase!");
+});
+
+// Client-side call (using fetch API)
+fetch('https://your-project-id.cloudfunctions.net/helloWorld')
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+    </code></pre>
+
+    <h2>30. Cloud Functions Firestore Trigger</h2>
+    <p>Creates a Cloud Function triggered by Firestore events.</p>
+    <pre><code>
+exports.onUserCreate = functions.firestore
+    .document('users/{userId}')
+    .onCreate((snap, context) => {
+        const newValue = snap.data();
+        console.log('New user created:', newValue);
+        // Perform actions with the new user data
+    });
+    </code></pre>
+
+    <h2>31. Remote Config Fetch and Activate</h2>
+    <p>Fetches and activates Remote Config values.</p>
+    <pre><code>
+firebase.remoteConfig()
+    .fetchAndActivate()
+    .then(() => {
+        const welcomeMessage = firebase.remoteConfig().getString("welcome_message");
+        console.log("Fetched welcome message:", welcomeMessage);
+    })
+    .catch((err) => {
+        console.error("Remote Config error:", err);
+    });
+    </code></pre>
+
+    <h2>32. Dynamic Links Creation</h2>
+    <p>Creates a Firebase Dynamic Link.</p>
+    <pre><code>
+const dynamicLink = firebase.dynamicLinks().createLink({
+    link: "https://www.example.com/",
+    domainUriPrefix: "https://example.page.link",
+    androidInfo: {
+        androidPackageName: "com.example.android"
+    },
+    iosInfo: {
+        iosBundleId: "com.example.ios"
+    }
+});
+console.log("Dynamic Link:", dynamicLink);
+    </code></pre>
+
+    <h2>33. App Check Token</h2>
+    <p>Retrieves an App Check token for added security.</p>
+    <pre><code>
+firebase.appCheck().activate('YOUR_RECAPTCHA_SITE_KEY', true);
+firebase.appCheck()
+    .getToken()
+    .then((result) => {
+        const token = result.token;
+        console.log("App Check Token:", token);
+    })
+    .catch((error) => {
+        console.error("Error getting App Check token:", error);
+    });
+    </code></pre>
+
+    <h2>34. Realtime Database Transaction</h2>
+    <p>Performs a transaction in the Realtime Database.</p>
+    <pre><code>
+const userCountRef = firebase.database().ref('stats/userCount');
+userCountRef.transaction((currentCount) => {
+    return (currentCount || 0) + 1;
+}).then((result) => {
+    if (result.committed) {
+        console.log("New user count:", result.snapshot.val());
+    }
+}).catch((error) => {
+    console.error("Transaction failed:", error);
+});
+    </code></pre>
+
+    <h2>35. Cloud Storage List Files</h2>
+    <p>Lists files in a Cloud Storage bucket.</p>
+    <pre><code>
+const listRef = firebase.storage().ref('images/');
+listRef.listAll()
+    .then((res) => {
+        res.items.forEach((itemRef) => {
+            console.log("File:", itemRef.name);
+        });
+    }).catch((error) => {
+        console.error("Error listing files:", error);
+    });
+    </code></pre>
+
+    <h2>36. Firebase Emulator Usage</h2>
+    <p>Connects to Firebase Emulator Suite for local development.</p>
+    <pre><code>
+if (location.hostname === "localhost") {
+    firebase.auth().useEmulator('http://localhost:9099');
+    firebase.firestore().useEmulator('localhost', 8080);
+    firebase.functions().useEmulator('localhost', 5001);
+    firebase.database().useEmulator('localhost', 9000);
+}
+    </code></pre>
+
+    <h2>37. Firebase Performance Custom Trace</h2>
+    <p>Creates a custom trace for performance monitoring.</p>
+    <pre><code>
+const trace = firebase.performance().trace('CUSTOM_TRACE_NAME');
+trace.start();
+
+// Perform the operations you want to measure here
+
+trace.stop();
+    </code></pre>
+
+    <h2>38. Firebase In-App Messaging</h2>
+    <p>Triggers a Firebase In-App Message programmatically.</p>
+    <pre><code>
+firebase.inAppMessaging().triggerEvent('custom_event')
+    .then(() => {
+        console.log('In-App Message triggered');
+    })
+    .catch((error) => {
+        console.error('Error triggering In-App Message:', error);
+    });
+    </code></pre>
+
+    <h2>39. Firebase A/B Testing</h2>
+    <p>Retrieves an A/B test variant.</p>
+    <pre><code>
+firebase.remoteConfig().fetchAndActivate().then(() => {
+    const variant = firebase.remoteConfig().getString('experiment_variant');
+    console.log('A/B Test Variant:', variant);
+});
+    </code></pre>
+
+    <h2>40. Firebase Crashlytics Log</h2>
+    <p>Logs a custom key and value that will be sent with your crash data.</p>
+    <pre><code>
+firebase.crashlytics().log('User tapped on login button');
+firebase.crashlytics().setCustomKey('last_UI_action', 'login_attempt');
+    </code></pre>
+    <p>This documentation outlines a social media app built with Firebase, showcasing various Firebase features and their implementations.</p>
+
+    <div class="feature">
+        <h2>1. User Registration</h2>
+        <p>Allows new users to create an account using email and password.</p>
+        <pre><code>
+function registerUser(email, password) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log("User registered:", user.uid);
+            createUserProfile(user.uid, email);
+        })
+        .catch((error) => {
+            console.error("Registration error:", error.message);
+        });
+}
+
+function createUserProfile(userId, email) {
+    firebase.firestore().collection('users').doc(userId).set({
+        email: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        posts: 0,
+        followers: 0,
+        following: 0
+    })
+    .then(() => console.log("User profile created"))
+    .catch((error) => console.error("Error creating profile:", error));
+}
+
+// Usage
+registerUser("newuser@example.com", "securepassword123");
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>2. User Login with Multiple Providers</h2>
+        <p>Allows users to log in using email/password, Google, or Facebook.</p>
+        <pre><code>
+function loginWithEmail(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log("User logged in:", user.uid);
+        })
+        .catch((error) => {
+            console.error("Login error:", error.message);
+        });
+}
+
+function loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            console.log("Google login successful:", user.uid);
+        }).catch((error) => {
+            console.error("Google login error:", error);
+        });
+}
+
+function loginWithFacebook() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            console.log("Facebook login successful:", user.uid);
+        }).catch((error) => {
+            console.error("Facebook login error:", error);
+        });
+}
+
+// Usage
+loginWithEmail("user@example.com", "password123");
+loginWithGoogle();
+loginWithFacebook();
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>3. User Profile Management</h2>
+        <p>Allows users to update their profile information and avatar.</p>
+        <pre><code>
+function updateUserProfile(displayName, photoURL) {
+    const user = firebase.auth().currentUser;
+    user.updateProfile({
+        displayName: displayName,
+        photoURL: photoURL
+    }).then(() => {
+        console.log("Profile updated successfully");
+        updateFirestoreProfile(user.uid, { displayName, photoURL });
+    }).catch((error) => {
+        console.error("Error updating profile:", error);
+    });
+}
+
+function updateFirestoreProfile(userId, data) {
+    firebase.firestore().collection('users').doc(userId).update(data)
+        .then(() => console.log("Firestore profile updated"))
+        .catch((error) => console.error("Error updating Firestore profile:", error));
+}
+
+function uploadProfilePicture(file) {
+    const user = firebase.auth().currentUser;
+    const storageRef = firebase.storage().ref(`profile_pictures/${user.uid}`);
+    storageRef.put(file).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
+            updateUserProfile(user.displayName, downloadURL);
+        });
+    }).catch((error) => {
+        console.error("Error uploading profile picture:", error);
+    });
+}
+
+// Usage
+updateUserProfile("John Doe", "https://example.com/avatar.jpg");
+// Assume 'fileInput' is an input element of type 'file'
+fileInput.addEventListener('change', (e) => uploadProfilePicture(e.target.files[0]));
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>4. Create and Manage Posts</h2>
+        <p>Allows users to create, read, update, and delete posts.</p>
+        <pre><code>
+function createPost(content, imageUrl = null) {
+    const user = firebase.auth().currentUser;
+    const post = {
+        authorId: user.uid,
+        authorName: user.displayName,
+        content: content,
+        imageUrl: imageUrl,
+        likes: 0,
+        comments: 0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    firebase.firestore().collection('posts').add(post)
+        .then((docRef) => {
+            console.log("Post created with ID:", docRef.id);
+            incrementUserPostCount(user.uid);
+        })
+        .catch((error) => {
+            console.error("Error creating post:", error);
+        });
+}
+
+function getPosts(limit = 10) {
+    firebase.firestore().collection('posts')
+        .orderBy('createdAt', 'desc')
+        .limit(limit)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(doc.id, " => ", doc.data());
+            });
+        })
+        .catch((error) => {
+            console.error("Error getting posts:", error);
+        });
+}
+
+function updatePost(postId, newContent) {
+    firebase.firestore().collection('posts').doc(postId).update({
+        content: newContent,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => console.log("Post updated successfully"))
+    .catch((error) => console.error("Error updating post:", error));
+}
+
+function deletePost(postId) {
+    firebase.firestore().collection('posts').doc(postId).delete()
+        .then(() => {
+            console.log("Post deleted successfully");
+            decrementUserPostCount(firebase.auth().currentUser.uid);
+        })
+        .catch((error) => console.error("Error deleting post:", error));
+}
+
+function incrementUserPostCount(userId) {
+    firebase.firestore().collection('users').doc(userId).update({
+        posts: firebase.firestore.FieldValue.increment(1)
+    });
+}
+
+function decrementUserPostCount(userId) {
+    firebase.firestore().collection('users').doc(userId).update({
+        posts: firebase.firestore.FieldValue.increment(-1)
+    });
+}
+
+// Usage
+createPost("Hello, Firebase!", "https://example.com/image.jpg");
+getPosts(20);
+updatePost("postId123", "Updated content");
+deletePost("postId123");
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>5. Real-time Feed</h2>
+        <p>Implements a real-time feed of posts from followed users.</p>
+        <pre><code>
+function setupRealTimeFeed(userId) {
+    firebase.firestore().collection('users').doc(userId).get()
+        .then((doc) => {
+            const following = doc.data().following || [];
+            const feedQuery = firebase.firestore().collection('posts')
+                .where('authorId', 'in', following)
+                .orderBy('createdAt', 'desc')
+                .limit(20);
+
+            feedQuery.onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        console.log("New post: ", change.doc.data());
+                        // Add post to UI
+                    }
+                    if (change.type === "modified") {
+                        console.log("Modified post: ", change.doc.data());
+                        // Update post in UI
+                    }
+                    if (change.type === "removed") {
+                        console.log("Removed post: ", change.doc.data());
+                        // Remove post from UI
+                    }
+                });
+            }, (error) => {
+                console.error("Feed listen error: ", error);
+            });
+        });
+}
+
+// Usage
+setupRealTimeFeed("currentUserId123");
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>6. Follow/Unfollow Users</h2>
+        <p>Allows users to follow and unfollow other users.</p>
+        <pre><code>
+function followUser(currentUserId, targetUserId) {
+    const batch = firebase.firestore().batch();
+    const currentUserRef = firebase.firestore().collection('users').doc(currentUserId);
+    const targetUserRef = firebase.firestore().collection('users').doc(targetUserId);
+
+    batch.update(currentUserRef, {
+        following: firebase.firestore.FieldValue.arrayUnion(targetUserId),
+        followingCount: firebase.firestore.FieldValue.increment(1)
+    });
+
+    batch.update(targetUserRef, {
+        followers: firebase.firestore.FieldValue.arrayUnion(currentUserId),
+        followerCount: firebase.firestore.FieldValue.increment(1)
+    });
+
+    batch.commit()
+        .then(() => console.log("Follow successful"))
+        .catch((error) => console.error("Follow error:", error));
+}
+
+function unfollowUser(currentUserId, targetUserId) {
+    const batch = firebase.firestore().batch();
+    const currentUserRef = firebase.firestore().collection('users').doc(currentUserId);
+    const targetUserRef = firebase.firestore().collection('users').doc(targetUserId);
+
+    batch.update(currentUserRef, {
+        following: firebase.firestore.FieldValue.arrayRemove(targetUserId),
+        followingCount: firebase.firestore.FieldValue.increment(-1)
+    });
+
+    batch.update(targetUserRef, {
+        followers: firebase.firestore.FieldValue.arrayRemove(currentUserId),
+        followerCount: firebase.firestore.FieldValue.increment(-1)
+    });
+
+    batch.commit()
+        .then(() => console.log("Unfollow successful"))
+        .catch((error) => console.error("Unfollow error:", error));
+}
+
+// Usage
+followUser("currentUserId123", "targetUserId456");
+unfollowUser("currentUserId123", "targetUserId789");
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>7. Like and Comment on Posts</h2>
+        <p>Implements functionality for liking posts and adding comments.</p>
+        <pre><code>
+function likePost(postId, userId) {
+    const postRef = firebase.firestore().collection('posts').doc(postId);
+    const likeRef = postRef.collection('likes').doc(userId);
+
+    firebase.firestore().runTransaction((transaction) => {
+        return transaction.get(postRef).then((postDoc) => {
+            if (!postDoc.exists) {
+                throw "Post does not exist!";
+            }
+
+            transaction.set(likeRef, { userId: userId });
+            transaction.update(postRef, { likes: firebase.firestore.FieldValue.increment(1) });
+        });
+    }).then(() => {
+        console.log("Like successful");
+    }).catch((error) => {
+        console.error("Like error:", error);
+    });
+}
+
+function unlikePost(postId, userId) {
+    const postRef = firebase.firestore().collection('posts').doc(postId);
+    const likeRef = postRef.collection('likes').doc(userId);
+
+    firebase.firestore().runTransaction((transaction) => {
+        return transaction.get(postRef).then((postDoc) => {
+            if (!postDoc.exists) {
+                throw "Post does not exist!";
+            }
+
+            transaction.delete(likeRef);
+            transaction.update(postRef, { likes: firebase.firestore.FieldValue.increment(-1) });
+        });
+    }).then(() => {
+        console.log("Unlike successful");
+    }).catch((error) => {
+        console.error("Unlike error:", error);
+    });
+}
+
+function addComment(postId, userId, content) {
+    const postRef = firebase.firestore().collection('posts').doc(postId);
+    const commentRef = postRef.collection('comments').doc();
+
+    const comment = {
+        userId: userId,
+        content: content,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    firebase.firestore().runTransaction((transaction) => {
+        return transaction.get(postRef).then((postDoc) => {
+            if (!postDoc.exists) {
+                throw "Post does not exist!";
+            }
+
+            transaction.set(commentRef, comment);
+            transaction.update(postRef, { comments: firebase.firestore.FieldValue.increment(1) });
+        });
+    }).then(() => {
+        console.log("Comment added successfully");
+    }).catch((error) => {
+        console.error("Error adding comment:", error);
+    });
+}
+
+// Usage
+likePost("postId123", "currentUserId");
+unlikePost("postId123", "currentUserId");
+addComment("postId123", "currentUserId", "Great post!");
+        </code></pre>
+    </div>
+    <div class="feature">
+        <h2>8. User Search (continued)</h2>
+        <p>Implements a user search functionality using Firebase Cloud Functions and Algolia.</p>
+        <pre><code>
+// Client-side search function
+function searchUsers(query) {
+    const algolia = algoliasearch('YOUR_ALGOLIA_APP_ID', 'YOUR_ALGOLIA_SEARCH_KEY');
+    const index = algolia.initIndex('users');
+
+    index.search(query)
+        .then(({ hits }) => {
+            console.log('Search results:', hits);
+            displaySearchResults(hits);
+        })
+        .catch(err => {
+            console.error('Error during search:', err);
+        });
+}
+
+function displaySearchResults(results) {
+    const searchResultsContainer = document.getElementById('searchResults');
+    searchResultsContainer.innerHTML = '';
+
+    results.forEach(user => {
+        const userElement = document.createElement('div');
+        userElement.innerHTML = `
+            <img src="${user.photoURL || 'default-avatar.png'}" alt="${user.displayName}">
+            <h3>${user.displayName}</h3>
+            <button onclick="followUser('${firebase.auth().currentUser.uid}', '${user.objectID}')">Follow</button>
+        `;
+        searchResultsContainer.appendChild(userElement);
+    });
+}
+
+// Usage
+searchUsers('John');
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>9. Real-time Chat</h2>
+        <p>Implements a real-time chat feature using Firebase Realtime Database.</p>
+        <pre><code>
+function sendMessage(senderId, receiverId, message) {
+    const chatId = [senderId, receiverId].sort().join('_');
+    const messageRef = firebase.database().ref('chats/' + chatId).push();
+
+    messageRef.set({
+        senderId: senderId,
+        message: message,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    })
+    .then(() => console.log('Message sent successfully'))
+    .catch(error => console.error('Error sending message:', error));
+}
+
+function listenForMessages(senderId, receiverId) {
+    const chatId = [senderId, receiverId].sort().join('_');
+    const chatRef = firebase.database().ref('chats/' + chatId);
+
+    chatRef.on('child_added', (snapshot) => {
+        const message = snapshot.val();
+        displayMessage(message);
+    });
+}
+
+function displayMessage(message) {
+    const chatContainer = document.getElementById('chatContainer');
+    const messageElement = document.createElement('div');
+    messageElement.className = message.senderId === firebase.auth().currentUser.uid ? 'sent' : 'received';
+    messageElement.textContent = message.message;
+    chatContainer.appendChild(messageElement);
+}
+
+// Usage
+sendMessage('currentUserId', 'recipientId', 'Hello, how are you?');
+listenForMessages('currentUserId', 'recipientId');
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>10. Push Notifications</h2>
+        <p>Implements push notifications for new messages and post interactions using Firebase Cloud Messaging.</p>
+        <pre><code>
+// Request permission and get FCM token
+function requestNotificationPermission() {
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            getFCMToken();
+        } else {
+            console.log('Unable to get permission to notify.');
+        }
+    });
+}
+
+function getFCMToken() {
+    firebase.messaging().getToken().then((currentToken) => {
+        if (currentToken) {
+            console.log('FCM Token:', currentToken);
+            saveFCMToken(currentToken);
+        } else {
+            console.log('No Instance ID token available. Request permission to generate one.');
+        }
+    }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+    });
+}
+
+function saveFCMToken(token) {
+    const userId = firebase.auth().currentUser.uid;
+    firebase.firestore().collection('users').doc(userId).update({
+        fcmToken: token
+    })
+    .then(() => console.log('FCM Token saved to Firestore'))
+    .catch(error => console.error('Error saving FCM Token:', error));
+}
+
+// Cloud Function to send push notification (index.js)
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+exports.sendNewMessageNotification = functions.database
+    .ref('/chats/{chatId}/{messageId}')
+    .onCreate((snapshot, context) => {
+        const message = snapshot.val();
+        const receiverId = context.params.chatId.split('_').find(id => id !== message.senderId);
+
+        return admin.firestore().collection('users').doc(receiverId).get()
+            .then(doc => {
+                const receiverToken = doc.data().fcmToken;
+                const payload = {
+                    notification: {
+                        title: 'New Message',
+                        body: `You have a new message from ${message.senderName}`,
+                        click_action: 'OPEN_CHAT_ACTION'
+                    }
+                };
+
+                return admin.messaging().sendToDevice(receiverToken, payload);
+            });
+    });
+
+// Usage
+requestNotificationPermission();
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>11. Content Moderation</h2>
+        <p>Implements content moderation using Firebase Cloud Functions and Google Cloud Vision API.</p>
+        <pre><code>
+// Cloud Function for image moderation (index.js)
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const vision = require('@google-cloud/vision');
+
+const client = new vision.ImageAnnotatorClient();
+
+exports.moderateImage = functions.storage.object().onFinalize(async (object) => {
+    const filePath = object.name;
+    const bucketName = object.bucket;
+
+    const [result] = await client.safeSearchDetection(`gs://${bucketName}/${filePath}`);
+    const detections = result.safeSearchAnnotation;
+
+    if (detections.adult === 'LIKELY' || detections.adult === 'VERY_LIKELY' ||
+        detections.violence === 'LIKELY' || detections.violence === 'VERY_LIKELY') {
+        console.log('Inappropriate content detected. Deleting file.');
+        return admin.storage().bucket(bucketName).file(filePath).delete();
+    } else {
+        console.log('Content passed moderation check.');
+        return null;
+    }
+});
+
+// Client-side upload function
+function uploadImage(file) {
+    const user = firebase.auth().currentUser;
+    const storageRef = firebase.storage().ref(`user_uploads/${user.uid}/${file.name}`);
+
+    storageRef.put(file).then((snapshot) => {
+        console.log('Image uploaded successfully');
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
+            createPost("Check out this image!", downloadURL);
+        });
+    }).catch((error) => {
+        console.error("Error uploading image:", error);
+    });
+}
+
+// Usage
+const fileInput = document.getElementById('imageUpload');
+fileInput.addEventListener('change', (e) => uploadImage(e.target.files[0]));
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>12. Analytics and User Engagement</h2>
+        <p>Implements Firebase Analytics to track user engagement and app usage.</p>
+        <pre><code>
+// Initialize Firebase Analytics
+firebase.analytics();
+
+// Log custom events
+function logPostCreation(postId, hasImage) {
+    firebase.analytics().logEvent('post_created', {
+        post_id: postId,
+        has_image: hasImage
+    });
+}
+
+function logPostInteraction(postId, interactionType) {
+    firebase.analytics().logEvent('post_interaction', {
+        post_id: postId,
+        interaction_type: interactionType // 'like', 'comment', 'share'
+    });
+}
+
+function logSearch(query) {
+    firebase.analytics().logEvent('search', {
+        search_term: query
+    });
+}
+
+// Track screen views
+function setCurrentScreen(screenName) {
+    firebase.analytics().setCurrentScreen(screenName);
+}
+
+// Usage
+logPostCreation('postId123', true);
+logPostInteraction('postId123', 'like');
+logSearch('travel tips');
+setCurrentScreen('Home Feed');
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>13. User Presence System</h2>
+        <p>Implements a user presence system to show online/offline status.</p>
+        <pre><code>
+// Set up presence system
+function setupPresence(userId) {
+    const userStatusDatabaseRef = firebase.database().ref('/status/' + userId);
+    const userStatusFirestoreRef = firebase.firestore().doc('/status/' + userId);
+
+    const isOfflineForDatabase = {
+        state: 'offline',
+        last_changed: firebase.database.ServerValue.TIMESTAMP,
+    };
+
+    const isOnlineForDatabase = {
+        state: 'online',
+        last_changed: firebase.database.ServerValue.TIMESTAMP,
+    };
+
+    const isOfflineForFirestore = {
+        state: 'offline',
+        last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const isOnlineForFirestore = {
+        state: 'online',
+        last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    firebase.database().ref('.info/connected').on('value', function(snapshot) {
+        if (snapshot.val() == false) {
+            userStatusFirestoreRef.set(isOfflineForFirestore);
+            return;
+        };
+
+        userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+            userStatusDatabaseRef.set(isOnlineForDatabase);
+            userStatusFirestoreRef.set(isOnlineForFirestore);
+        });
+    });
+}
+
+// Usage
+setupPresence(firebase.auth().currentUser.uid);
+
+// Listen for presence changes
+function listenForPresenceChanges(userId) {
+    const userStatusFirestoreRef = firebase.firestore().doc('/status/' + userId);
+
+    userStatusFirestoreRef.onSnapshot(function(doc) {
+        const isOnline = doc.data().state === 'online';
+        console.log(userId + ' is ' + (isOnline ? 'online' : 'offline'));
+        updateUserPresenceUI(userId, isOnline);
+    });
+}
+
+function updateUserPresenceUI(userId, isOnline) {
+    const userElement = document.getElementById('user-' + userId);
+    if (userElement) {
+        userElement.classList.toggle('online', isOnline);
+        userElement.classList.toggle('offline', !isOnline);
+    }
+}
+
+// Usage
+listenForPresenceChanges('friendUserId');
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>14. Geolocation and Nearby Users</h2>
+        <p>Implements geolocation features to find nearby users using Firestore and GeoFirestore.</p>
+        <pre><code>
+// Initialize GeoFirestore
+const geofirestore = new GeoFirestore(firebase.firestore());
+const geocollection = geofirestore.collection('locations');
+
+// Update user's location
+function updateUserLocation(userId, latitude, longitude) {
+    geocollection.doc(userId).set({
+        coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
+        userId: userId
+    }).then(() => {
+        console.log('Location updated successfully');
+    }).catch(error => {
+        console.error('Error updating location:', error);
+    });
+}
+
+// Find nearby users
+function findNearbyUsers(latitude, longitude, radiusInKm) {
+    const center = new firebase.firestore.GeoPoint(latitude, longitude);
+    const radius = radiusInKm;
+
+    const query = geocollection.near({ center, radius });
+    query.get().then(snapshot => {
+        snapshot.forEach(doc => {
+            console.log(doc.id, ' => ', doc.data());
+        });
+    }).catch(error => {
+        console.error('Error finding nearby users:', error);
+    });
+}
+
+// Usage
+navigator.geolocation.getCurrentPosition(position => {
+    const { latitude, longitude } = position.coords;
+    updateUserLocation(firebase.auth().currentUser.uid, latitude, longitude);
+    findNearbyUsers(latitude, longitude, 10); // Find users within 10km
+});
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>15. In-App Purchases</h2>
+        <p>Implements in-app purchases for premium features using Firebase Cloud Functions and Stripe.</p>
+        <pre><code>
+// Cloud Function for creating a Stripe checkout session (index.js)
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const stripe = require('stripe')(functions.config().stripe.secret);
+
+exports.createCheckoutSession = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in to make a purchase.');
+    }
+
+    const { priceId } = data;
+
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [{
+                price: priceId,
+                quantity: 1,
+            }],
+            mode: 'payment',
+            success_url: `${functions.config().app.url}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${functions.config().app.url}/canceled`,
+            client_reference_id: context.auth.uid
+        });
+
+        return { sessionId: session.id };
+    } catch (error) {
+        console.error('Error creating checkout session:', error);
+        throw new functions.https.HttpsError('internal', 'Unable to create checkout session');
+    }
+});
+
+// Client-side purchase function
+function purchasePremium() {
+    const purchaseButton = document.getElementById('purchasePremiumButton');
+    purchaseButton.disabled = true;
+
+    const createCheckoutSession = firebase.functions().httpsCallable('createCheckoutSession');
+    createCheckoutSession({ priceId: 'price_1234567890' })
+        .then(result => {
+            const stripe = Stripe('YOUR_STRIPE_PUBLISHABLE_KEY');
+            return stripe.redirectToCheckout({ sessionId: result.data.sessionId });
+        })
+        .then(result => {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
+        .finally(() => {
+            purchaseButton.disabled = false;
+        });
+}
+
+// Usage
+document.getElementById('purchasePremiumButton').addEventListener('click', purchasePremium);
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>16. A/B Testing (continued)</h2>
+        <p>Implements A/B testing using Firebase Remote Config and A/B Testing.</p>
+        <pre><code>
+// Fetch and activate Remote Config
+remoteConfig.fetchAndActivate()
+    .then(() => {
+        applyRemoteConfig();
+    })
+    .catch((err) => {
+        console.error('Error fetching remote config:', err);
+    });
+
+function applyRemoteConfig() {
+    const welcomeMessage = remoteConfig.getString('welcome_message');
+    const buttonColor = remoteConfig.getString('button_color');
+
+    document.getElementById('welcomeText').textContent = welcomeMessage;
+    document.getElementById('mainButton').style.backgroundColor = buttonColor;
+
+    // Log exposure to A/B test
+    firebase.analytics().logEvent('experiment_impression', {
+        experiment_id: 'welcome_message_test'
+    });
+}
+
+// Track conversion event
+function trackConversion() {
+    firebase.analytics().logEvent('main_button_click', {
+        experiment_id: 'welcome_message_test'
+    });
+}
+
+// Usage
+document.getElementById('mainButton').addEventListener('click', trackConversion);
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>17. Personalized Content Recommendations</h2>
+        <p>Implements a simple content recommendation system using Firebase Cloud Functions and Firestore.</p>
+        <pre><code>
+// Cloud Function to update user interests (index.js)
+exports.updateUserInterests = functions.firestore
+    .document('posts/{postId}/likes/{userId}')
+    .onCreate((snap, context) => {
+        const userId = context.params.userId;
+        const postId = context.params.postId;
+
+        return admin.firestore().collection('posts').doc(postId).get()
+            .then(postDoc => {
+                const tags = postDoc.data().tags || [];
+                const userRef = admin.firestore().collection('users').doc(userId);
+
+                return userRef.update({
+                    interests: admin.firestore.FieldValue.arrayUnion(...tags)
+                });
+            });
+    });
+
+// Client-side function to get personalized recommendations
+function getPersonalizedRecommendations() {
+    const userId = firebase.auth().currentUser.uid;
+    const userRef = firebase.firestore().collection('users').doc(userId);
+
+    userRef.get().then(doc => {
+        const interests = doc.data().interests || [];
+        return firebase.firestore().collection('posts')
+            .where('tags', 'array-contains-any', interests)
+            .orderBy('createdAt', 'desc')
+            .limit(10)
+            .get();
+    }).then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+            console.log(doc.id, ' => ', doc.data());
+            displayRecommendedPost(doc.data());
+        });
+    }).catch(error => {
+        console.error('Error getting recommendations:', error);
+    });
+}
+
+function displayRecommendedPost(post) {
+    const recommendationsContainer = document.getElementById('recommendations');
+    const postElement = document.createElement('div');
+    postElement.innerHTML = `
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <p>Tags: ${post.tags.join(', ')}</p>
+    `;
+    recommendationsContainer.appendChild(postElement);
+}
+
+// Usage
+getPersonalizedRecommendations();
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>18. User Activity Feed</h2>
+        <p>Implements a user activity feed using Firestore and Cloud Functions.</p>
+        <pre><code>
+// Cloud Function to create activity items (index.js)
+exports.createActivityItem = functions.firestore
+    .document('posts/{postId}/likes/{userId}')
+    .onCreate((snap, context) => {
+        const userId = context.params.userId;
+        const postId = context.params.postId;
+
+        return admin.firestore().collection('posts').doc(postId).get()
+            .then(postDoc => {
+                const postAuthorId = postDoc.data().authorId;
+                return admin.firestore().collection('activities').add({
+                    type: 'like',
+                    userId: userId,
+                    postId: postId,
+                    postAuthorId: postAuthorId,
+                    createdAt: admin.firestore.FieldValue.serverTimestamp()
+                });
+            });
+    });
+
+// Client-side function to get user activity feed
+function getUserActivityFeed() {
+    const userId = firebase.auth().currentUser.uid;
+    firebase.firestore().collection('activities')
+        .where('postAuthorId', '==', userId)
+        .orderBy('createdAt', 'desc')
+        .limit(20)
+        .onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    displayActivityItem(change.doc.data());
+                }
+            });
+        }, error => {
+            console.error('Error getting activity feed:', error);
+        });
+}
+
+function displayActivityItem(activity) {
+    const activityFeedContainer = document.getElementById('activityFeed');
+    const activityElement = document.createElement('div');
+    activityElement.innerHTML = `
+        <p>${activity.userId} liked your post ${activity.postId}</p>
+        <small>${activity.createdAt.toDate().toLocaleString()}</small>
+    `;
+    activityFeedContainer.appendChild(activityElement);
+}
+
+// Usage
+getUserActivityFeed();
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>19. File Sharing and Collaboration</h2>
+        <p>Implements file sharing and collaboration features using Firebase Storage and Firestore.</p>
+        <pre><code>
+// Function to upload and share a file
+function uploadAndShareFile(file, collaboratorIds) {
+    const user = firebase.auth().currentUser;
+    const storageRef = firebase.storage().ref(`shared_files/${user.uid}/${file.name}`);
+
+    storageRef.put(file).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+    }).then(downloadURL => {
+        return firebase.firestore().collection('shared_files').add({
+            name: file.name,
+            url: downloadURL,
+            ownerId: user.uid,
+            collaborators: collaboratorIds,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }).then(docRef => {
+        console.log('File shared successfully with ID:', docRef.id);
+    }).catch(error => {
+        console.error('Error sharing file:', error);
+    });
+}
+
+// Function to get shared files
+function getSharedFiles() {
+    const userId = firebase.auth().currentUser.uid;
+    firebase.firestore().collection('shared_files')
+        .where('collaborators', 'array-contains', userId)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    displaySharedFile(change.doc.data());
+                }
+            });
+        }, error => {
+            console.error('Error getting shared files:', error);
+        });
+}
+
+function displaySharedFile(file) {
+    const sharedFilesContainer = document.getElementById('sharedFiles');
+    const fileElement = document.createElement('div');
+    fileElement.innerHTML = `
+        <h4>${file.name}</h4>
+        <a href="${file.url}" target="_blank">Download</a>
+        <p>Shared by: ${file.ownerId}</p>
+    `;
+    sharedFilesContainer.appendChild(fileElement);
+}
+
+// Usage
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    const collaboratorIds = ['user1', 'user2']; // Example collaborator IDs
+    uploadAndShareFile(file, collaboratorIds);
+});
+
+getSharedFiles();
+        </code></pre>
+    </div>
+
+    <div class="feature">
+        <h2>20. Offline Support</h2>
+        <p>Implements offline support using Firebase Offline Persistence and Service Workers.</p>
+        <pre><code>
+// Enable offline persistence for Firestore
+firebase.firestore().enablePersistence()
+  .catch(function(err) {
+    if (err.code == 'failed-precondition') {
+      console.error('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
+    } else if (err.code == 'unimplemented') {
+      console.error('The current browser does not support all of the features required to enable persistence');
+    }
+  });
+
+// Service Worker Registration (in your main JavaScript file)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+// service-worker.js
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('v1').then(function(cache) {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/styles.css',
+        '/app.js',
+        '/offline.html'
+      ]);
+    })
+  );
+});
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request);
+    }).catch(function() {
+      return caches.match('/offline.html');
+    })
+  );
+});
+
+// Function to handle offline/online status
+function handleConnectivityChange() {
+  if (navigator.onLine) {
+    console.log('App is online');
+    document.body.classList.remove('offline');
+    syncOfflineData();
+  } else {
+    console.log('App is offline');
+    document.body.classList.add('offline');
+  }
+}
+
+// Function to sync offline data when back online
+function syncOfflineData() {
+  // Implement your sync logic here
+  console.log('Syncing offline data');
+}
+
+// Usage
+window.addEventListener('online', handleConnectivityChange);
+window.addEventListener('offline', handleConnectivityChange);
+handleConnectivityChange(); // Check initial state
+        </code></pre>
+    </div></div>
+    <a href="#Top" class="fab" style="position: fixed; bottom: 20px; right: 20px; text-decoration: none;">↑</div>
+   <script src="app.js"></script>
+
+</body>
+</html>
